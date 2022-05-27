@@ -1,0 +1,23 @@
+{
+	"title": "Fine Speed - Sound Delay (Extension | SFX)",
+	"type": "effects",
+	"tags": [
+		"fun",
+		"roleplay"
+	],
+	"ignore": [
+		"*.psd*",
+		"*.vcproj*",
+		"*.svn*",
+		"*.git*",
+		"*LICENSE*",
+		"*.md",
+		"*.code-workspace*",
+		"README.md",
+		".git*",
+		".vscode*",
+		"docs",
+		"version.txt",
+		"*.yml"
+	]
+}
