@@ -17,6 +17,7 @@ local function RegisterNetworkCallbacks()
 end
 
 local function PlayerFootstepHookInit()
+	local table_RandomBySeq = table.RandomBySeq
 	local math_Clamp = math.Clamp
 	local RealTime = RealTime
 	local slib_magnitude = slib.magnitude
@@ -29,20 +30,18 @@ local function PlayerFootstepHookInit()
 		if not ply.FineSpeedExt.BaseSpeed then return end
 
 		ply.FineSpeedExt.LastStepTime = ply.FineSpeedExt.LastStepTime or 0
+		if ply.FineSpeedExt.LastStepTime < RealTime() then
+			local default = 1 / ply.FineSpeedExt.BaseSpeed
+			local magnitude = slib_magnitude(ply.FineSpeedExt.MovementVector)
+			local delay = math_Clamp(1 - (magnitude * default), 0, 1)
+			ply.FineSpeedExt.LastStepTime = RealTime() + delay
 
-		if ply.FineSpeedExt.LastStepTime > RealTime() then
-			return true
+			local vel = ply:GetVelocity():Length()
+			local delta = math_Clamp(vel / 300, .5, 1)
+			ply:EmitSound(table_RandomBySeq(FineSpeed.GearSounds), 90 * delta, 95 + (delta * 15), delta)
 		end
 
-		-- local magnitude = slib_magnitude(ply.FineSpeedExt.MovementVector)
-		-- local delay = ply.FineSpeedExt.BaseSpeed / magnitude
-		-- delay = math_Clamp(delay, 0, 1)
-
-		local default = 1 / ply.FineSpeedExt.BaseSpeed
-		local magnitude = slib_magnitude(ply.FineSpeedExt.MovementVector)
-		local delay = math_Clamp(1 - (magnitude * default), 0, 1)
-
-		ply.FineSpeedExt.LastStepTime = RealTime() + delay
+		return true
 	end
 
 	shook.SetHandlerAll('PlayerFootstep', handler)
